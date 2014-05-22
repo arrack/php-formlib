@@ -1,6 +1,6 @@
 FormLib
 =============
-generation html form object
+generate html form object
 
 Example
 =============

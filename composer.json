@@ -1,6 +1,6 @@
 {
     "name": "arrack/form-lib",
-    "description": "generate html form object",
+    "description": "quickly to generate html form object",
     "keywords": ["PHP Form Lib"],
     "type": "library",
     "license": "MIT",

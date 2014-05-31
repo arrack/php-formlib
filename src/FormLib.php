@@ -7,6 +7,7 @@
  */
 class FormLib
 {
+    public static $default_class = '';
 
     public static function __callStatic($name, $arguments)
     {
@@ -86,6 +87,9 @@ class FormLib
      */
     public static function text($name, $value, $attributes = [])
     {
+        if (!isset($attributes['class']) and '' != self::$default_class) {
+            $attributes['class'] = self::$default_class;
+        }
         return self::input('text', $name, $value, $attributes);
     }
 
@@ -138,6 +142,10 @@ class FormLib
      */
     public static function select($name, $value, $options, $attributes = [])
     {
+        if (!isset($attributes['class']) and '' != self::$default_class) {
+            $attributes['class'] = self::$default_class;
+        }
+
         $html = sprintf(
             '<select id="%s" name="%s"%s>',
             $name,
@@ -189,11 +197,13 @@ class FormLib
     public static function attributesToHtml($attributes)
     {
         $html = '';
-        foreach ($attributes as $attribute => $attribute_value) {
-            if (true === $attribute_value) {
-                $attribute_value = $attribute;
+        if (is_array($attributes)) {
+            foreach ($attributes as $attribute => $attribute_value) {
+                if (true === $attribute_value) {
+                    $attribute_value = $attribute;
+                }
+                $html .= sprintf(' %s="%s"', $attribute, htmlspecialchars($attribute_value));
             }
-            $html .= sprintf(' %s="%s"', $attribute, htmlspecialchars($attribute_value));
         }
         return $html;
     }

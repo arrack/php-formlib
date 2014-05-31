@@ -209,8 +209,7 @@ class FormLib
     }
 
     /**
-     * attributesToHtml
-     * attributes to html
+     * optionsFromNumber
      *
      * @static
      * @param int $start attributes

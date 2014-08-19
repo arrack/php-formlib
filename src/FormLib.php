@@ -8,6 +8,7 @@
 class FormLib
 {
     public static $default_class = '';
+    private static $reserved_keywords = ['id', 'name', 'type', 'value'];
 
     public static function __callStatic($name, $arguments)
     {
@@ -70,7 +71,7 @@ class FormLib
         $html = sprintf(
             '<button type="submit"%s>%s</button>',
             self::attributesToHtml($attributes),
-            htmlspecialchars($value)
+            $value
         );
         return $html;
     }
@@ -154,12 +155,25 @@ class FormLib
         );
 
         foreach ($options as $option_value => $option_name) {
-            $html .= sprintf(
-                '<option value="%s"%s>%s</option>',
-                $option_value,
-                ($option_value == $value) ? ' selected="selected"' : '',
-                $option_name
-            );
+            if (is_array($option_name)) {
+                $html .= '<optgroup label="' . $option_value . '">';
+                foreach ($option_name as $suboption_value => $suboption_name) {
+                    $html .= sprintf(
+                        '<option value="%s"%s>%s</option>',
+                        htmlspecialchars($suboption_value),
+                        ($suboption_value == $value) ? ' selected="selected"' : '',
+                        htmlspecialchars($suboption_name)
+                    );
+                }
+                $html .= '</optgroup>';
+            } else {
+                $html .= sprintf(
+                    '<option value="%s"%s>%s</option>',
+                    htmlspecialchars($option_value),
+                    ($option_value == $value) ? ' selected="selected"' : '',
+                    htmlspecialchars($option_name)
+                );
+            }
         }
 
         $html .= '</select>';
@@ -199,6 +213,9 @@ class FormLib
         $html = '';
         if (is_array($attributes)) {
             foreach ($attributes as $attribute => $attribute_value) {
+                if (in_array($attribute, self::$reserved_keywords)) {
+                    continue;
+                }
                 if (true === $attribute_value) {
                     $attribute_value = $attribute;
                 }

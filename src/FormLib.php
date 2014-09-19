@@ -147,9 +147,16 @@ class FormLib
             $attributes['class'] = self::$default_class;
         }
 
+        $id = $name;
+        if ($attributes['multiple']) {
+            $name .= '[]';
+        }
+
+        $value_array = is_array($value) ? $value : [];
+
         $html = sprintf(
             '<select id="%s" name="%s"%s>',
-            $name,
+            $id,
             $name,
             self::attributesToHtml($attributes)
         );
@@ -161,7 +168,7 @@ class FormLib
                     $html .= sprintf(
                         '<option value="%s"%s>%s</option>',
                         htmlspecialchars($suboption_value),
-                        ($suboption_value == $value) ? ' selected="selected"' : '',
+                        ($suboption_value == $value || in_array($suboption_value, $value_array)) ? ' selected="selected"' : '',
                         htmlspecialchars($suboption_name)
                     );
                 }
@@ -170,7 +177,7 @@ class FormLib
                 $html .= sprintf(
                     '<option value="%s"%s>%s</option>',
                     htmlspecialchars($option_value),
-                    ($option_value == $value) ? ' selected="selected"' : '',
+                    ($option_value == $value || in_array($option_value, $value_array)) ? ' selected="selected"' : '',
                     htmlspecialchars($option_name)
                 );
             }

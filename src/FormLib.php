@@ -3,7 +3,6 @@
  * FormLib
  * 產生Form
  *
- * @author Arrack
  */
 class FormLib
 {
@@ -199,8 +198,14 @@ class FormLib
      */
     public static function textarea($name, $value, $attributes = [])
     {
+        if (!isset($attributes['class']) and '' != self::$default_class) {
+            $attributes['class'] = self::$default_class;
+        }
+
         $html = sprintf(
-            '<textarea%s>%s</textarea>',
+            '<textarea id="%s" name="%s" %s>%s</textarea>',
+            $name,
+            $name,
             self::attributesToHtml($attributes),
             htmlspecialchars($value)
         );

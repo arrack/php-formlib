@@ -27,10 +27,14 @@ class FormLib
      */
     public static function input($type, $name, $value, $attributes = [])
     {
+        if (!isset($attributes['id'])) {
+            $attributes['id'] = $name;
+        }
+
         $html = sprintf(
             '<input type="%s" id="%s" name="%s" value="%s"%s>',
             $type,
-            $name,
+            $attributes['id'],
             $name,
             htmlspecialchars($value),
             self::attributesToHtml($attributes)
